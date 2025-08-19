@@ -606,7 +606,7 @@ const Navbar = () => {
 
         {/* Right Buttons */}
         <div className="hidden lg:flex gap-4">
-          <a href="https://thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-5 py-2 rounded-full text-sm font-semibold">Thrive Brands</a>
+          <a href="https://brands.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-5 py-2 rounded-full text-sm font-semibold">Thrive Brands</a>
           <a href="https://vectorwebapp.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-5 py-2 rounded-full text-sm font-semibold">Vector.ai</a>
         </div>
 
@@ -652,7 +652,7 @@ const Navbar = () => {
           <NavLink to="/contact" className="block text-[#d9b96a] hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>Contact Us</NavLink>
 
           <div className="flex flex-col gap-3 mt-4">
-            <a href="https://thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-4 py-2 rounded-full text-center font-semibold">Thrive Brands</a>
+            <a href="https://brands.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-4 py-2 rounded-full text-center font-semibold">Thrive Brands</a>
             <a href="https://vectorwebapp.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-4 py-2 rounded-full text-center font-semibold">Vector.ai</a>
           </div>
         </div>
