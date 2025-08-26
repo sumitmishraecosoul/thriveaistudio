@@ -125,9 +125,11 @@
 // export default HeroSection;
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import RightArrow from "../../assets/icons/ArrowRight.svg";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const [currentWord, setCurrentWord] = useState(0);
   const words = ["Decisions", "Insights", "Progress", "Growth", "Strategies"];
   const [prevWord, setPrevWord] = useState(null);
@@ -167,13 +169,11 @@ const HeroSection = () => {
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 flex-wrap justify-center">
-        <button className="bg-gradient-to-r from-[#1A5069] via-[#1A5069] to-[#0F7BAE] hover:opacity-90 text-[#FFE1AF] text-lg sm:text-xl lg:text-2xl px-8 sm:px-10 py-3 rounded-full transition duration-300 w-full sm:w-auto">
-          Let's Talk
-        </button>
-
-        <button className="bg-gradient-to-r from-[#1A5069] via-[#1A5069] to-[#0F7BAE] hover:opacity-90 text-[#FFE1AF] text-lg sm:text-xl lg:text-2xl px-6 sm:px-8 py-3 rounded-full flex items-center justify-center gap-2 transition duration-300 w-full sm:w-auto">
-          Read Our Blog
-          <img src={RightArrow} alt="Right Arrow" className="h-6 sm:h-8 lg:h-10" />
+        <button 
+          onClick={() => navigate('/contact')}
+          className="bg-gradient-to-r from-[#1A5069] via-[#1A5069] to-[#0F7BAE] hover:opacity-90 text-[#FFE1AF] text-lg sm:text-xl lg:text-2xl px-8 sm:px-10 py-3 rounded-full transition duration-300 w-full sm:w-auto"
+        >
+          Connect Now
         </button>
       </div>
 

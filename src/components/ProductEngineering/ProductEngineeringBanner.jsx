@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProductEngineeringBannerBg from '../../assets/images/ProductEngineeringBanner.svg'; // Use your actual image path
 
 const ProductEngineeringBanner = () => {
+  const navigate = useNavigate();
   return (
     <section
       className="w-full min-h-[200px] bg-cover bg-center flex flex-col justify-center px-6 md:px-20 py-12"
@@ -17,7 +19,10 @@ const ProductEngineeringBanner = () => {
        From internal portals to customer-facing apps, we engineer scalable digital products that evolve with your business.
       </p>
 
-      <button className="px-20 py-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full text-sm md:text-base font-medium hover:scale-105 transition w-max">
+      <button 
+        onClick={() => navigate('/contact')}
+        className="px-20 py-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full text-sm md:text-base font-medium hover:scale-105 transition w-max"
+      >
         Connect Now
       </button>
     </section>

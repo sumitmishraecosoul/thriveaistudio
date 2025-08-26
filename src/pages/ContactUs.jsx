@@ -458,10 +458,17 @@ import "react-phone-input-2/lib/style.css";
 const ContactUs = () => {
   const form = useRef();
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneInputKey, setPhoneInputKey] = useState(0); // for resetting PhoneInput
+  const [phoneInputKey, setPhoneInputKey] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const sendEmail = (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setShowSuccess(false);
+    setShowError(false);
 
     // Add phone number to form before sending
     const hiddenPhoneInput = document.createElement("input");
@@ -480,20 +487,71 @@ const ContactUs = () => {
       .then(
         (result) => {
           console.log("Message sent:", result.text);
-          alert("Message sent successfully!");
+          setIsSubmitting(false);
+          setShowSuccess(true);
           form.current.reset();
           setPhoneNumber("");
-          setPhoneInputKey((prev) => prev + 1); // Re-render PhoneInput to clear it
+          setPhoneInputKey((prev) => prev + 1);
+          
+          // Hide success message after 5 seconds
+          setTimeout(() => {
+            setShowSuccess(false);
+          }, 5000);
         },
         (error) => {
           console.error("Failed to send message:", error.text);
-          alert("Failed to send message.");
+          setIsSubmitting(false);
+          setErrorMessage("Failed to send message. Please try again.");
+          setShowError(true);
+          
+          // Hide error message after 5 seconds
+          setTimeout(() => {
+            setShowError(false);
+          }, 5000);
         }
       );
   };
 
   return (
     <div className="bg-black text-white font-sans overflow-x-hidden">
+      <style jsx>{`
+        /* Fix autofill styling */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:hover,
+        textarea:-webkit-autofill:focus,
+        textarea:-webkit-autofill:active,
+        select:-webkit-autofill,
+        select:-webkit-autofill:hover,
+        select:-webkit-autofill:focus,
+        select:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 30px transparent inset !important;
+          -webkit-text-fill-color: white !important;
+          background-color: transparent !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
+        
+        /* Ensure form elements maintain dark styling */
+        input, textarea, select {
+          background-color: transparent !important;
+          color: white !important;
+        }
+        
+        input::placeholder, textarea::placeholder {
+          color: #9ca3af !important;
+        }
+        
+        /* Focus states */
+        input:focus, textarea:focus, select:focus {
+          background-color: transparent !important;
+          color: white !important;
+          outline: none !important;
+        }
+      `}</style>
+      
       <Navbar />
 
       <div className="flex flex-col items-center justify-start px-4 py-16 bg-center bg-no-repeat min-h-screen">
@@ -522,112 +580,112 @@ const ContactUs = () => {
           <form
             ref={form}
             onSubmit={sendEmail}
-            className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4"
+            className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 relative"
           >
+            {/* Success Message */}
+            {showSuccess && (
+              <div className="col-span-full mb-4 p-4 bg-green-600/20 border border-green-500 rounded-md text-green-400 text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="font-medium">Message sent successfully!</span>
+                </div>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {showError && (
+              <div className="col-span-full mb-4 p-4 bg-red-600/20 border border-red-500 rounded-md text-red-400 text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <span className="font-medium">{errorMessage}</span>
+                </div>
+              </div>
+            )}
+
             <input
               type="text"
               name="user_name"
               placeholder="Full Name*"
               required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-white col-span-1 sm:col-span-2"
+              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-gray-400 col-span-1 sm:col-span-2 focus:outline-none focus:border-blue-400 transition-colors"
+              style={{
+                backgroundColor: 'transparent',
+                color: 'white',
+                WebkitTextFillColor: 'white'
+              }}
             />
             <input
               type="email"
               name="user_email"
               placeholder="Email Address*"
               required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-white col-span-1"
+              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-gray-400 col-span-1 focus:outline-none focus:border-blue-400 transition-colors"
+              style={{
+                backgroundColor: 'transparent',
+                color: 'white',
+                WebkitTextFillColor: 'white'
+              }}
             />
-            {/* <div className="col-span-1">
-              <PhoneInput
-                key={phoneInputKey} // resets input
-                country={"us"}
-                value={phoneNumber}
-                onChange={(phone) => setPhoneNumber(`+${phone}`)}
-                inputStyle={{
-                  width: "100%",
-                  padding: "24px",
-                  backgroundColor: "transparent",
-                  color: "white",
-                  border: "1px solid #3b82f6",
-                  borderRadius: "0.375rem",
-                }}
-                onFocus={{
-                   width: "100%",
-                  padding: "24px",
-                  backgroundColor: "transparent",
-                  color: "white",
-                  border: "1px solid #3b82f6",
-                  borderRadius: "0.375rem",
-                }}
-                dropdownStyle={{
-                  backgroundColor: "transparent",
-                  color: "white",
-                }}
-                buttonStyle={{
-                  backgroundColor: "transparent",
-                  borderRight: "1px solid #3b82f6",
-                }}
-                enableSearch
-              />
-            </div> */}
-           <input
-  type="tel"
-  name="phone"
-  placeholder="Phone Number*"
-  required
-  className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-white col-span-1"
-/>
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone Number*"
+              required
+              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-gray-400 col-span-1 focus:outline-none focus:border-blue-400 transition-colors"
+              style={{
+                backgroundColor: 'transparent',
+                color: 'white',
+                WebkitTextFillColor: 'white'
+              }}
+            />
 
-
-            {/* <select
+            <select
               name="subject"
               required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-white col-span-1 sm:col-span-2"
+              className="p-3 bg-transparent border border-blue-500 rounded-md text-white col-span-1 sm:col-span-2 focus:outline-none focus:border-blue-400 transition-colors appearance-none"
+              style={{
+                backgroundColor: "transparent",
+                color: "white",
+                WebkitTextFillColor: 'white'
+              }}
             >
-              <option value="" disabled selected>
+              <option value="" disabled selected className="bg-black text-white">
                 Select a topic
               </option>
-              <option value="General Inquiry">General Inquiry</option>
-              <option value="Partnership">Partnership</option>
-              <option value="Support">Support</option>
-            </select> */}
-            <select
-  name="subject"
-  required
-  className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-white col-span-1 sm:col-span-2 appearance-none"
-  style={{
-    backgroundColor: "transparent",
-    color: "white",
-  }}
->
-  <option value="" disabled selected className="bg-black text-white">
-    Select a topic
-  </option>
-  <option value="General Inquiry" className="bg-black text-white">
-    General Inquiry
-  </option>
-  <option value="Partnership" className="bg-black text-white">
-    Partnership
-  </option>
-  <option value="Support" className="bg-black text-white">
-    Support
-  </option>
-</select>
+              <option value="General Inquiry" className="bg-black text-white">
+                General Inquiry
+              </option>
+              <option value="Partnership" className="bg-black text-white">
+                Partnership
+              </option>
+              <option value="Support" className="bg-black text-white">
+                Support
+              </option>
+            </select>
 
             <textarea
               name="message"
               rows="5"
               placeholder="Message*"
               required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-white col-span-full"
+              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-gray-400 col-span-full focus:outline-none focus:border-blue-400 transition-colors"
+              style={{
+                backgroundColor: 'transparent',
+                color: 'white',
+                WebkitTextFillColor: 'white'
+              }}
             ></textarea>
 
             <button
               type="submit"
-              className="col-span-full bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] font-semibold py-3 rounded-md hover:opacity-90 transition-opacity duration-200"
+              disabled={isSubmitting}
+              className="col-span-full bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] font-semibold py-3 rounded-md hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Send Message
+              {isSubmitting ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>

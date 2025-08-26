@@ -2713,6 +2713,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import CardImg1 from '../../assets/images/card1.svg';
 import CardImg2 from '../../assets/images/card2.svg';
 import CardImg3 from '../../assets/images/card3.svg';
@@ -2746,6 +2747,7 @@ const steps = [
 ];
 
 const HowThriveWorks = () => {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const isAnimating = useRef(false);
@@ -2879,11 +2881,12 @@ const HowThriveWorks = () => {
 
         {/* CTA Button - Added more space above */}
         <motion.button
+          onClick={() => navigate('/contact')}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="mt-2 px-16 md:px-20 py-3 bg-gradient-to-r from-[#1A5069] via-[#1A5069] to-[#0F7BAE] rounded-full text-white text-base md:text-lg font-semibold z-10"
         >
-          Let's Thrive
+          Connect Now
         </motion.button>
       </section>
     </div>

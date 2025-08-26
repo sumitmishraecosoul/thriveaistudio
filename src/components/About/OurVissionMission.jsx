@@ -188,6 +188,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import OurVisionImg from '../../assets/images/OurVision.svg';
 import OurMissionImg from '../../assets/images/OurMission.svg';
 import AboutGridShadowBg from '../../assets/images/AboutGridShadowBg.png';
@@ -218,6 +219,7 @@ const buttonVariant = {
 };
 
 const OurVisionMission = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative w-full bg-black text-white py-12 px-4 flex flex-col items-center space-y-10 overflow-hidden">
       
@@ -254,6 +256,7 @@ const OurVisionMission = () => {
 
       {/* Connect Now Button */}
       <motion.button
+        onClick={() => navigate('/contact')}
         className="relative z-10 mt-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-white text-lg font-medium px-16 py-3 rounded-full hover:scale-105 transition"
         initial="hidden"
         whileInView="visible"

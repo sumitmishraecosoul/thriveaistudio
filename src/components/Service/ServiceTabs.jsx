@@ -216,6 +216,7 @@
 
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const tabs = [
   {
@@ -261,6 +262,7 @@ const tabs = [
 ];
 
 const ServicesTabs = () => {
+  const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
   return (
@@ -300,8 +302,11 @@ const ServicesTabs = () => {
       </div>
 
       {/* Button */}
-      <button className="px-10 py-3 sm:px-14 sm:py-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full hover:scale-105 transition text-base sm:text-lg">
-        Explore More
+      <button 
+        onClick={() => navigate('/contact')}
+        className="px-10 py-3 sm:px-14 sm:py-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full hover:scale-105 transition text-base sm:text-lg"
+      >
+        Connect Now
       </button>
     </section>
   );

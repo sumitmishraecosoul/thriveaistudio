@@ -37,9 +37,11 @@
 
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AboutUsBg from '../../assets/images/AboutUsBanner.svg';
 
 const AboutUsBanner = () => {
+  const navigate = useNavigate();
   const [currentWord, setCurrentWord] = useState(0);
   const words = ["Growth", "Innovation", "Transformation", "Impact", "Progress"];
   const [prevWord, setPrevWord] = useState(null);
@@ -83,9 +85,10 @@ const AboutUsBanner = () => {
         </h2>
 
         <button
+          onClick={() => navigate('/contact')}
           className="mt-6 px-12 py-2 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-white rounded-full text-sm md:text-base font-medium hover:scale-105 transition"
         >
-          Let's Talk
+          Connect Now
         </button>
       </div>
 

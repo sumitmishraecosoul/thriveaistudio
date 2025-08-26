@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import MobilePhones from '../../assets/images/MobileWithShadow.png';  // adjust path if needed
 
 const KnowYourBusiness = () => {
+  const navigate = useNavigate();
   return (
     <section className="bg-black text-white py-12 flex flex-col items-center justify-center">
       {/* Heading */}
@@ -19,8 +21,11 @@ const KnowYourBusiness = () => {
       </div>
 
       {/* CTA Button */}
-      <button className="bg-gradient-to-r from-[#1A5069] via-[#1A5069] to-[#0F7BAE] text-[#EED4AD] hover:bg-[#0A5A7C] text-lg px-12 py-4 rounded-full transition-all duration-300">
-        Explore Vector.ai
+      <button 
+        onClick={() => navigate('/contact')}
+        className="bg-gradient-to-r from-[#1A5069] via-[#1A5069] to-[#0F7BAE] text-[#EED4AD] hover:bg-[#0A5A7C] text-lg px-12 py-4 rounded-full transition-all duration-300"
+      >
+        Connect Now
       </button>
     </section>
   );

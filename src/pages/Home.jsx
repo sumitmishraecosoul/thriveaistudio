@@ -10,6 +10,7 @@ import Footer from '../components/Home/Footer';
 import Navbar from '../components/Navbar';
 import HomeBannerImg from "../assets/images/navbar_and_hero_bg.svg";
 import WhyThriveSectionResponsive from '../components/Home/WhyThriveSection_Responsive';
+import ServicesTabs from '../components/Service/ServiceTabs';
 
 export default function Home() {
  return (
@@ -47,6 +48,7 @@ export default function Home() {
       <ProblemsWithAI />
 
       <WhyThriveSectionResponsive />
+      <ServicesTabs />
 
       <HowThriveWorks />
 

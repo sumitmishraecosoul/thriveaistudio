@@ -28,9 +28,11 @@
 
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProductEngineeringBannerBg from '../../assets/images/ProductEngineeringBanner.svg';
 
 const AISolutionBanner = () => {
+  const navigate = useNavigate();
   const [currentWord, setCurrentWord] = useState(0);
   const words = ["Brand", "Strategy", "Decision-Making", "Success", "Growth"];
   const [prevWord, setPrevWord] = useState(null);
@@ -78,8 +80,11 @@ const AISolutionBanner = () => {
         AI Solutions That Power Precision, Personalization & Performance for Modern Brands
       </p>
 
-      <button className="px-20 py-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full text-sm md:text-base font-medium hover:scale-105 transition w-max">
-        Book A Call
+      <button 
+        onClick={() => navigate('/contact')}
+        className="px-20 py-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full text-sm md:text-base font-medium hover:scale-105 transition w-max"
+      >
+        Connect Now
       </button>
 
       <style jsx>{`

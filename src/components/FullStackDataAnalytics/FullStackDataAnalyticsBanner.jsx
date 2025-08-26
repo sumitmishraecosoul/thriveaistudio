@@ -28,9 +28,11 @@
 
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ServiceBg from '../../assets/images/FullStackBanner.svg';
 
 const FullStackDataAnalyticsBanner = () => {
+  const navigate = useNavigate();
   const [currentWord, setCurrentWord] = useState(0);
   const words = ["Insights", "Strategies", "Decisions", "Opportunities", "Intelligence"];
   const [prevWord, setPrevWord] = useState(null);
@@ -78,8 +80,11 @@ const FullStackDataAnalyticsBanner = () => {
         Offering end-to-end Data Solutions, we integrate, store, visualize and predict to help you make smarter decisions. 
       </p>
 
-      <button className="px-20 py-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full text-sm md:text-base font-medium hover:scale-105 transition w-max">
-        Connect with Us
+      <button 
+        onClick={() => navigate('/contact')}
+        className="px-20 py-4 bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full text-sm md:text-base font-medium hover:scale-105 transition w-max"
+      >
+        Connect Now
       </button>
 
       <style jsx>{`

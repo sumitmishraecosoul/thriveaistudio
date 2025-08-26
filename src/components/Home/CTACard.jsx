@@ -464,6 +464,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import CTAcardBg from "../../assets/images/CTACardBg.svg";
 
 const steps = [
@@ -473,6 +474,7 @@ const steps = [
 ];
 
 const CTAcard = () => {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const isAnimating = useRef(false);
@@ -594,9 +596,10 @@ const CTAcard = () => {
 
         {/* Button */}
         <button
+          onClick={() => navigate('/contact')}
           className="mt-8 px-8 md:px-16 py-2 bg-gradient-to-r from-[#1A5069] via-[#1A5069] to-[#0F7BAE] text-[#EED4AD] rounded-full text-base md:text-lg lg:text-xl font-semibold hover:opacity-90 transition-opacity"
         >
-          Thrive with Us
+          Connect Now
         </button>
       </section>
     </div>
