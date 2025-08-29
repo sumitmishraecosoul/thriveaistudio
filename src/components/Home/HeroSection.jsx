@@ -153,7 +153,7 @@ const HeroSection = () => {
 
   return (
     <section className="text-white px-4 sm:px-6 lg:px-12 xl:px-24 2xl:px-40 py-12 min-h-[60vh] flex flex-col items-center justify-center text-center">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 leading-tight">
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 leading-tight">
         AI-Powered Acceleration for Scalable{" "}
         <span 
           className="inline-block text-left" 
@@ -165,7 +165,7 @@ const HeroSection = () => {
         </span>
       </h1>
       <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-300 mb-8 max-w-3xl">
-        AI-Powered Brand Acceleration for Ecommerce Leaders
+        AI-Powered Enterprise Acceleration
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 flex-wrap justify-center">

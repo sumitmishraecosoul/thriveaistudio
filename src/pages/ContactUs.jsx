@@ -454,6 +454,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Home/Footer";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import MeetingScheduler from "../components/MeetingScheduler/MeetingScheduler";
 
 const ContactUs = () => {
   const form = useRef();
@@ -463,6 +464,7 @@ const ContactUs = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [activeTab, setActiveTab] = useState("schedule"); // Only "schedule" - contact form removed
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -514,7 +516,7 @@ const ContactUs = () => {
 
   return (
     <div className="bg-black text-white font-sans overflow-x-hidden">
-      <style jsx>{`
+      <style>{`
         /* Fix autofill styling */
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
@@ -555,6 +557,7 @@ const ContactUs = () => {
       <Navbar />
 
       <div className="flex flex-col items-center justify-start px-4 py-16 bg-center bg-no-repeat min-h-screen">
+        {/* Hero Title */}
         <div className="w-full max-w-6xl mb-12 text-center px-2">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#EED4AD] leading-tight">
             Thrive with Us. <span className="text-[#55ACD5]">Connect Now</span>
@@ -566,128 +569,37 @@ const ContactUs = () => {
           </p>
         </div>
 
-        <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-10 px-2">
-          <div className="flex flex-col justify-center">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#55ACD5] mb-4">
-              Contact Us | Thrive
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-[#EED4AD]">
-              We're dedicated to empowering individuals and businesses alike.
-              Let's explore opportunities together.
-            </p>
-          </div>
-
-          <form
-            ref={form}
-            onSubmit={sendEmail}
-            className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 relative"
-          >
-            {/* Success Message */}
-            {showSuccess && (
-              <div className="col-span-full mb-4 p-4 bg-green-600/20 border border-green-500 rounded-md text-green-400 text-center">
-                <div className="flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="font-medium">Message sent successfully!</span>
-                </div>
-              </div>
-            )}
-
-            {/* Error Message */}
-            {showError && (
-              <div className="col-span-full mb-4 p-4 bg-red-600/20 border border-red-500 rounded-md text-red-400 text-center">
-                <div className="flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                  <span className="font-medium">{errorMessage}</span>
-                </div>
-              </div>
-            )}
-
-            <input
-              type="text"
-              name="user_name"
-              placeholder="Full Name*"
-              required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-gray-400 col-span-1 sm:col-span-2 focus:outline-none focus:border-blue-400 transition-colors"
-              style={{
-                backgroundColor: 'transparent',
-                color: 'white',
-                WebkitTextFillColor: 'white'
-              }}
-            />
-            <input
-              type="email"
-              name="user_email"
-              placeholder="Email Address*"
-              required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-gray-400 col-span-1 focus:outline-none focus:border-blue-400 transition-colors"
-              style={{
-                backgroundColor: 'transparent',
-                color: 'white',
-                WebkitTextFillColor: 'white'
-              }}
-            />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number*"
-              required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-gray-400 col-span-1 focus:outline-none focus:border-blue-400 transition-colors"
-              style={{
-                backgroundColor: 'transparent',
-                color: 'white',
-                WebkitTextFillColor: 'white'
-              }}
-            />
-
-            <select
-              name="subject"
-              required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white col-span-1 sm:col-span-2 focus:outline-none focus:border-blue-400 transition-colors appearance-none"
-              style={{
-                backgroundColor: "transparent",
-                color: "white",
-                WebkitTextFillColor: 'white'
-              }}
-            >
-              <option value="" disabled selected className="bg-black text-white">
-                Select a topic
-              </option>
-              <option value="General Inquiry" className="bg-black text-white">
-                General Inquiry
-              </option>
-              <option value="Partnership" className="bg-black text-white">
-                Partnership
-              </option>
-              <option value="Support" className="bg-black text-white">
-                Support
-              </option>
-            </select>
-
-            <textarea
-              name="message"
-              rows="5"
-              placeholder="Message*"
-              required
-              className="p-3 bg-transparent border border-blue-500 rounded-md text-white placeholder-gray-400 col-span-full focus:outline-none focus:border-blue-400 transition-colors"
-              style={{
-                backgroundColor: 'transparent',
-                color: 'white',
-                WebkitTextFillColor: 'white'
-              }}
-            ></textarea>
-
+        {/* Only Schedule Discovery Call - Contact Form Commented Out */}
+        {/* 
+        <div className="w-full max-w-4xl mb-8">
+          <div className="flex justify-center space-x-1 bg-[#051f30]/30 rounded-lg p-1">
             <button
-              type="submit"
-              disabled={isSubmitting}
-              className="col-span-full bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD] font-semibold py-3 rounded-md hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => setActiveTab("contact")}
+              className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
+                activeTab === "contact"
+                  ? "bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD]"
+                  : "text-[#55ACD5] hover:text-[#EED4AD] hover:bg-[#55ACD5]/10"
+              }`}
             >
-              {isSubmitting ? "Sending..." : "Send Message"}
+              Contact Form
             </button>
-          </form>
+            <button
+              onClick={() => setActiveTab("schedule")}
+              className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
+                activeTab === "schedule"
+                  ? "bg-gradient-to-r from-[#1A5069] to-[#0F7BAE] text-[#EED4AD]"
+                  : "text-[#55ACD5] hover:text-[#EED4AD] hover:bg-[#55ACD5]/10"
+              }`}
+            >
+              Schedule Discovery Call
+            </button>
+          </div>
+        </div>
+        */}
+
+        {/* Only Schedule Discovery Call */}
+        <div className="w-full max-w-6xl">
+          <MeetingScheduler />
         </div>
       </div>
 

@@ -556,7 +556,7 @@ const Navbar = () => {
     <div
       className="relative text-white w-full"
       style={{
-        backgroundImage: "url('/src/assets/bg.png')",
+        backgroundColor: "#051f30",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
