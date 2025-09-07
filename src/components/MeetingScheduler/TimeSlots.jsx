@@ -1,20 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const TimeSlots = ({ onTimeSelect, selectedDate }) => {
-  const [selectedTime, setSelectedTime] = useState('10:30 PM');
+const TimeSlots = ({ onTimeSelect, selectedDate, selectedTimezone = 'Asia/Calcutta' }) => {
+  const [selectedTime, setSelectedTime] = useState('');
+  const [timeSlots, setTimeSlots] = useState([]);
 
-  // Available time slots (in 24-hour format for easier comparison)
-  const timeSlots = [
-    '07:30 PM',
-    '08:00 PM', 
-    '09:00 PM',
-    '10:30 PM',
-    '11:00 PM',
-    '11:30 PM'
-  ];
+  // Timezone-specific working hours
+  const timezoneWorkingHours = {
+    'Asia/Calcutta': { start: 9, end: 18 }, // 9 AM to 6 PM
+    'America/New_York': { start: 9, end: 17 }, // 9 AM to 5 PM
+    'America/Los_Angeles': { start: 9, end: 17 }, // 9 AM to 5 PM
+    'Europe/London': { start: 9, end: 17 }, // 9 AM to 5 PM
+    'Europe/Paris': { start: 9, end: 17 }, // 9 AM to 5 PM
+    'Europe/Berlin': { start: 9, end: 17 }, // 9 AM to 5 PM
+  };
 
-  const handleTimeSelect = (time) => {
-    setSelectedTime(time);
+  // Generate time slots based on timezone
+  const generateTimeSlots = (timezone) => {
+    const workingHours = timezoneWorkingHours[timezone] || timezoneWorkingHours['Asia/Calcutta'];
+    const slots = [];
+    
+    for (let hour = workingHours.start; hour < workingHours.end; hour++) {
+      // Add full hour slot
+      slots.push({
+        time: `${hour.toString().padStart(2, '0')}:00`,
+        display: formatTime(hour, 0, timezone)
+      });
+      
+      // Add half hour slot
+      slots.push({
+        time: `${hour.toString().padStart(2, '0')}:30`,
+        display: formatTime(hour, 30, timezone)
+      });
+    }
+    
+    return slots;
+  };
+
+  // Format time in 12-hour format with AM/PM for all timezones
+  const formatTime = (hour, minutes, timezone) => {
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+    return `${displayHour}:${minutes.toString().padStart(2, '0')} ${period}`;
+  };
+
+  // Helper function to get timezone display name
+  const getTimezoneDisplay = (timezone) => {
+    const timezoneMap = {
+      'Asia/Calcutta': 'GMT+5:30',
+      'America/New_York': 'GMT-5:00',
+      'America/Los_Angeles': 'GMT-8:00',
+      'Europe/London': 'GMT+0:00',
+      'Europe/Paris': 'GMT+1:00',
+      'Europe/Berlin': 'GMT+1:00',
+    };
+    return timezoneMap[timezone] || 'GMT+5:30';
+  };
+
+  // Helper function to get working hours display in 12-hour format
+  const getWorkingHoursDisplay = (timezone) => {
+    const workingHours = timezoneWorkingHours[timezone] || timezoneWorkingHours['Asia/Calcutta'];
+    
+    const startPeriod = workingHours.start >= 12 ? 'PM' : 'AM';
+    const endPeriod = workingHours.end >= 12 ? 'PM' : 'AM';
+    const startHour = workingHours.start === 0 ? 12 : workingHours.start > 12 ? workingHours.start - 12 : workingHours.start;
+    const endHour = workingHours.end === 0 ? 12 : workingHours.end > 12 ? workingHours.end - 12 : workingHours.end;
+    
+    return `${startHour}:00 ${startPeriod} - ${endHour}:00 ${endPeriod}`;
+  };
+
+  // Update time slots when timezone changes
+  useEffect(() => {
+    const newTimeSlots = generateTimeSlots(selectedTimezone);
+    setTimeSlots(newTimeSlots);
+    setSelectedTime(''); // Reset selection when timezone changes
+  }, [selectedTimezone]);
+
+  const handleTimeSelect = (timeSlot) => {
+    setSelectedTime(timeSlot.time);
   };
 
   const handleConfirmSelection = () => {
@@ -24,43 +86,37 @@ const TimeSlots = ({ onTimeSelect, selectedDate }) => {
   return (
     <div className="space-y-6">
       {/* Time slots grid */}
-      <div className="grid grid-cols-1 gap-3">
-        {timeSlots.map((time) => (
-          <div key={time} className="flex items-center justify-between">
+      <div className="grid grid-cols-2 gap-3 max-h-80 overflow-y-auto">
+        {timeSlots.map((timeSlot) => (
+          <div key={timeSlot.time} className="flex items-center justify-between">
             <button
-              onClick={() => handleTimeSelect(time)}
+              onClick={() => handleTimeSelect(timeSlot)}
               className={`
                 flex-1 p-3 rounded-md border text-sm font-medium transition-all duration-200
-                ${selectedTime === time
+                ${selectedTime === timeSlot.time
                   ? 'bg-[#1A5069] text-[#EED4AD] border-[#55ACD5]'
                   : 'bg-transparent text-[#EED4AD] border-[#55ACD5]/30 hover:border-[#55ACD5] hover:bg-[#55ACD5]/10'
                 }
               `}
             >
-              {time}
+              {timeSlot.display}
             </button>
-            
-            {selectedTime === time && (
-              <button
-                onClick={handleConfirmSelection}
-                className="ml-3 px-4 py-3 bg-[#1A5069] text-[#EED4AD] rounded-md text-sm font-medium hover:bg-[#0F7BAE] transition-colors"
-              >
-                Select
-              </button>
-            )}
           </div>
         ))}
       </div>
 
-      {/* Timezone info */}
-      <div className="pt-4 border-t border-[#55ACD5]/20">
-        <div className="flex items-center space-x-3">
-          <svg className="w-5 h-5 text-[#55ACD5]" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-          </svg>
-          <span className="text-[#55ACD5] text-sm">Asia/Calcutta (GMT+5:30)</span>
+      {/* Confirm selection button */}
+      {selectedTime && (
+        <div className="flex justify-center pt-4">
+          <button
+            onClick={handleConfirmSelection}
+            className="px-6 py-3 bg-[#1A5069] text-[#EED4AD] rounded-md text-sm font-medium hover:bg-[#0F7BAE] transition-colors"
+          >
+            Confirm Time: {timeSlots.find(slot => slot.time === selectedTime)?.display}
+          </button>
         </div>
-      </div>
+      )}
+
     </div>
   );
 };

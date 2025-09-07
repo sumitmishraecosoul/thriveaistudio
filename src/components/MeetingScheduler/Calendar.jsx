@@ -50,7 +50,7 @@ const Calendar = ({ onDateSelect }) => {
   const handleDateClick = (day) => {
     if (isDateAvailable(day)) {
       const selectedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-      onDateSelect(selectedDate);
+      onDateSelect(selectedDate, 'Asia/Calcutta');
     }
   };
 
@@ -145,21 +145,11 @@ const Calendar = ({ onDateSelect }) => {
         })}
       </div>
 
-      {/* Timezone Selector */}
+      {/* Fixed Timezone Display */}
       <div className="mt-6">
         <label className="block text-sm font-medium text-[#EED4AD] mb-2">Time zone</label>
-        <div className="relative">
-          <select className="w-full p-3 bg-transparent border border-[#55ACD5]/30 rounded-md text-[#55ACD5] appearance-none focus:outline-none focus:border-[#55ACD5]">
-            <option value="GMT+05:30">GMT+05:30 Asia/Calcutta (GMT+5:30)</option>
-            <option value="GMT-05:00">GMT-05:00 Eastern Time (GMT-5:00)</option>
-            <option value="GMT-08:00">GMT-08:00 Pacific Time (GMT-8:00)</option>
-            <option value="GMT+00:00">GMT+00:00 UTC (GMT+0:00)</option>
-          </select>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <svg className="w-4 h-4 text-[#55ACD5]" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
-          </div>
+        <div className="w-full p-3 bg-[#051f30]/30 border border-[#55ACD5]/30 rounded-md text-[#55ACD5]">
+          Asia/Calcutta (GMT+5:30)
         </div>
       </div>
     </div>

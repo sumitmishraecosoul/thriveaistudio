@@ -10,6 +10,7 @@ const MeetingScheduler = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTimezone, setSelectedTimezone] = useState('Asia/Calcutta');
   const [userDetails, setUserDetails] = useState({});
   const [guestEmails, setGuestEmails] = useState([]);
   const [isScheduling, setIsScheduling] = useState(false);
@@ -20,8 +21,43 @@ const MeetingScheduler = () => {
     longDescription: "We've helped thousands of brands just like you double, triple, or even quadruple their sales on Amazon and other marketplaces like TikTok shop, Target+, Walmart and more."
   });
 
-  const handleDateSelect = (date) => {
+  // Helper function to get timezone display name
+  const getTimezoneDisplay = (timezone) => {
+    const timezoneMap = {
+      'Asia/Calcutta': 'GMT+5:30',
+      'America/New_York': 'GMT-5:00',
+      'America/Los_Angeles': 'GMT-8:00',
+      'Europe/London': 'GMT+0:00',
+      'Europe/Paris': 'GMT+1:00',
+      'Europe/Berlin': 'GMT+1:00',
+    };
+    return timezoneMap[timezone] || 'GMT+5:30';
+  };
+
+  // Helper function to get working hours display in 12-hour format
+  const getWorkingHoursDisplay = (timezone) => {
+    const timezoneWorkingHours = {
+      'Asia/Calcutta': { start: 9, end: 18 },
+      'America/New_York': { start: 9, end: 17 },
+      'America/Los_Angeles': { start: 9, end: 17 },
+      'Europe/London': { start: 9, end: 17 },
+      'Europe/Paris': { start: 9, end: 17 },
+      'Europe/Berlin': { start: 9, end: 17 },
+    };
+    
+    const workingHours = timezoneWorkingHours[timezone] || timezoneWorkingHours['Asia/Calcutta'];
+    
+    const startPeriod = workingHours.start >= 12 ? 'PM' : 'AM';
+    const endPeriod = workingHours.end >= 12 ? 'PM' : 'AM';
+    const startHour = workingHours.start === 0 ? 12 : workingHours.start > 12 ? workingHours.start - 12 : workingHours.start;
+    const endHour = workingHours.end === 0 ? 12 : workingHours.end > 12 ? workingHours.end - 12 : workingHours.end;
+    
+    return `${startHour}:00 ${startPeriod} - ${endHour}:00 ${endPeriod}`;
+  };
+
+  const handleDateSelect = (date, timezone) => {
     setSelectedDate(date);
+    setSelectedTimezone('Asia/Calcutta'); // Always use Asia/Calcutta
     setCurrentStep(2);
   };
 
@@ -202,10 +238,15 @@ const MeetingScheduler = () => {
                   <svg className="w-4 h-4 text-[#55ACD5]" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-[#55ACD5] text-sm">Timezone: Asia/Calcutta (GMT+5:30)</span>
+                  <span className="text-[#55ACD5] text-sm">Timezone: {selectedTimezone} ({getTimezoneDisplay(selectedTimezone)})</span>
+                </div>
+                <div className="mt-1">
+                  <span className="text-[#55ACD5] text-xs">
+                    Working Hours: {getWorkingHoursDisplay(selectedTimezone)}
+                  </span>
                 </div>
               </div>
-              <TimeSlots onTimeSelect={handleTimeSelect} selectedDate={selectedDate} />
+              <TimeSlots onTimeSelect={handleTimeSelect} selectedDate={selectedDate} selectedTimezone={selectedTimezone} />
             </div>
           </div>
         );
@@ -279,6 +320,24 @@ const MeetingScheduler = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
+      <style>{`
+        /* Fix dropdown background for dark theme */
+        select {
+          background-color: #051f30 !important;
+          color: #55ACD5 !important;
+        }
+        
+        select option {
+          background-color: #051f30 !important;
+          color: #55ACD5 !important;
+        }
+        
+        /* Ensure select maintains dark styling */
+        select:focus {
+          background-color: #051f30 !important;
+          color: #55ACD5 !important;
+        }
+      `}</style>
       <div className="max-w-6xl mx-auto">
         {renderStep()}
       </div>
