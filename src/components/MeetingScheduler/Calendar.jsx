@@ -18,7 +18,7 @@ const Calendar = ({ onDateSelect }) => {
     const today = new Date();
     const availableDates = [];
     
-    // Generate available dates for the next 30 days
+    // Generate available dates starting from today for the next 30 days
     for (let i = 0; i < 30; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
@@ -50,7 +50,7 @@ const Calendar = ({ onDateSelect }) => {
   const handleDateClick = (day) => {
     if (isDateAvailable(day)) {
       const selectedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-      onDateSelect(selectedDate, 'Asia/Calcutta');
+      onDateSelect(selectedDate, 'Asia/Kolkata');
     }
   };
 
@@ -149,7 +149,7 @@ const Calendar = ({ onDateSelect }) => {
       <div className="mt-6">
         <label className="block text-sm font-medium text-[#EED4AD] mb-2">Time zone</label>
         <div className="w-full p-3 bg-[#051f30]/30 border border-[#55ACD5]/30 rounded-md text-[#55ACD5]">
-          Asia/Calcutta (GMT+5:30)
+          Asia/Kolkata (GMT+5:30) - Noida
         </div>
       </div>
     </div>

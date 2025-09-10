@@ -10,7 +10,7 @@ const MeetingScheduler = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [selectedTimezone, setSelectedTimezone] = useState('Asia/Calcutta');
+  const [selectedTimezone, setSelectedTimezone] = useState('Asia/Kolkata');
   const [userDetails, setUserDetails] = useState({});
   const [guestEmails, setGuestEmails] = useState([]);
   const [isScheduling, setIsScheduling] = useState(false);
@@ -24,6 +24,7 @@ const MeetingScheduler = () => {
   // Helper function to get timezone display name
   const getTimezoneDisplay = (timezone) => {
     const timezoneMap = {
+      'Asia/Kolkata': 'GMT+5:30',
       'Asia/Calcutta': 'GMT+5:30',
       'America/New_York': 'GMT-5:00',
       'America/Los_Angeles': 'GMT-8:00',
@@ -36,32 +37,18 @@ const MeetingScheduler = () => {
 
   // Helper function to get working hours display in 12-hour format
   const getWorkingHoursDisplay = (timezone) => {
-    const timezoneWorkingHours = {
-      'Asia/Calcutta': { start: 9, end: 18 },
-      'America/New_York': { start: 9, end: 17 },
-      'America/Los_Angeles': { start: 9, end: 17 },
-      'Europe/London': { start: 9, end: 17 },
-      'Europe/Paris': { start: 9, end: 17 },
-      'Europe/Berlin': { start: 9, end: 17 },
-    };
-    
-    const workingHours = timezoneWorkingHours[timezone] || timezoneWorkingHours['Asia/Calcutta'];
-    
-    const startPeriod = workingHours.start >= 12 ? 'PM' : 'AM';
-    const endPeriod = workingHours.end >= 12 ? 'PM' : 'AM';
-    const startHour = workingHours.start === 0 ? 12 : workingHours.start > 12 ? workingHours.start - 12 : workingHours.start;
-    const endHour = workingHours.end === 0 ? 12 : workingHours.end > 12 ? workingHours.end - 12 : workingHours.end;
-    
-    return `${startHour}:00 ${startPeriod} - ${endHour}:00 ${endPeriod}`;
+    // All timezones now use Noida business hours (9 AM - 6 PM)
+    return '9:00 AM - 6:00 PM (Monday-Friday)';
   };
 
   const handleDateSelect = (date, timezone) => {
     setSelectedDate(date);
-    setSelectedTimezone('Asia/Calcutta'); // Always use Asia/Calcutta
+    setSelectedTimezone('Asia/Kolkata'); // Always use Asia/Kolkata (Noida)
     setCurrentStep(2);
   };
 
   const handleTimeSelect = (time) => {
+    console.log('MeetingScheduler received time:', time);
     setSelectedTime(time);
     setCurrentStep(3);
   };
@@ -77,23 +64,38 @@ const MeetingScheduler = () => {
     setIsScheduling(true);
     try {
       // Create Teams meeting
+      // Fix timezone issue: Use local date instead of UTC
+      const year = selectedDate?.getFullYear();
+      const month = String(selectedDate?.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate?.getDate()).padStart(2, '0');
+      const dateString = `${year}-${month}-${day}`;
+      
       const meetingData = {
-        title: meetingDetails.title,
-        date: selectedDate?.toISOString().split('T')[0], // Format as YYYY-MM-DD
-        time: selectedTime,
-        timezone: 'Asia/Calcutta (GMT+5:30)',
-        duration: meetingDetails.duration,
+        selectedDate: dateString, // Format as YYYY-MM-DD (local date, not UTC)
+        selectedTime: selectedTime, // Use the exact time format from frontend
         userDetails: userDetails,
         guestEmails: guestEmails // Add guest emails
         // Organizer selection removed - managed internally
       };
 
-      console.log('Meeting data being sent:', meetingData);
-      console.log('Selected date:', selectedDate);
-      console.log('User details:', userDetails);
-      console.log('Guest emails:', guestEmails);
+      console.log('=== SCHEDULING MEETING REQUEST ===');
+      console.log('📅 Selected Date:', selectedDate);
+      console.log('⏰ Selected Time (raw):', selectedTime);
+      console.log('👤 User Details:', userDetails);
+      console.log('📧 Guest Emails:', guestEmails);
+      console.log('📦 Request Body (meetingData):', JSON.stringify(meetingData, null, 2));
+      console.log('🌐 API Endpoint: /api/schedule-discovery-call');
+      console.log('=====================================');
 
       const teamsResult = await teamsService.createTeamsMeeting(meetingData);
+      
+      console.log('=== SCHEDULING MEETING RESPONSE ===');
+      console.log('✅ Success:', teamsResult.success);
+      console.log('📝 Message:', teamsResult.message);
+      console.log('🔗 Meeting Link:', teamsResult.meetingLink);
+      console.log('📧 Email Sent:', teamsResult.emailSent);
+      console.log('📊 Full Response:', JSON.stringify(teamsResult, null, 2));
+      console.log('=====================================');
       
       if (teamsResult.success) {
         // Send meeting invitation email
@@ -185,7 +187,7 @@ const MeetingScheduler = () => {
                   <svg className="w-4 h-4 text-[#55ACD5]" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-[#55ACD5] text-sm">Timezone: Asia/Calcutta (GMT+5:30)</span>
+                  <span className="text-[#55ACD5] text-sm">Timezone: Asia/Kolkata (GMT+5:30) - Noida</span>
                 </div>
               </div>
               <Calendar onDateSelect={handleDateSelect} />

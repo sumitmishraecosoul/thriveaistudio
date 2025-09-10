@@ -14,19 +14,25 @@ class TeamsService {
   // Generate a Microsoft Teams meeting link
   async createTeamsMeeting(meetingDetails) {
     try {
-      // Prepare the request body
+      // Prepare the request body - use the exact format expected by backend
       const requestBody = {
-        selectedDate: meetingDetails.date,
-        selectedTime: meetingDetails.time,
+        selectedDate: meetingDetails.selectedDate,
+        selectedTime: meetingDetails.selectedTime,
         userDetails: meetingDetails.userDetails,
         guestEmails: meetingDetails.guestEmails || []
         // Organizer selection removed - managed internally
       };
 
-      console.log('Sending request to backend:', requestBody);
-
       // Call the backend API to create a real Teams meeting
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      
+      console.log('=== TEAMS SERVICE API CALL ===');
+      console.log('🌐 API URL:', `${apiBaseUrl}/api/schedule-discovery-call`);
+      console.log('📦 Request Body:', JSON.stringify(requestBody, null, 2));
+      console.log('📋 Request Headers:', {
+        'Content-Type': 'application/json'
+      });
+      console.log('================================');
       const response = await fetch(`${apiBaseUrl}/api/schedule-discovery-call`, {
         method: 'POST',
         headers: {
@@ -34,6 +40,12 @@ class TeamsService {
         },
         body: JSON.stringify(requestBody)
       });
+      
+      console.log('=== API RESPONSE ===');
+      console.log('📊 Response Status:', response.status);
+      console.log('📊 Response OK:', response.ok);
+      console.log('📊 Response Headers:', Object.fromEntries(response.headers.entries()));
+      console.log('===================');
 
       // Check if response is ok
       if (!response.ok) {
@@ -51,6 +63,10 @@ class TeamsService {
       }
 
       const result = await response.json();
+      
+      console.log('=== API RESPONSE BODY ===');
+      console.log('📊 Response Data:', JSON.stringify(result, null, 2));
+      console.log('========================');
       
       if (result.success) {
         return {
