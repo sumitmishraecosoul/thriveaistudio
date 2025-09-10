@@ -64,10 +64,15 @@ const MeetingScheduler = () => {
     setIsScheduling(true);
     try {
       // Create Teams meeting
-      // Fix timezone issue: Use local date instead of UTC
-      const year = selectedDate?.getFullYear();
-      const month = String(selectedDate?.getMonth() + 1).padStart(2, '0');
-      const day = String(selectedDate?.getDate()).padStart(2, '0');
+      // CRITICAL FIX: Force Asia/Kolkata timezone to prevent production timezone issues
+      // Manual timezone conversion to ensure consistent behavior across all environments
+      const kolkataOffset = 5.5 * 60; // Asia/Kolkata is UTC+5:30 (5.5 hours = 330 minutes)
+      const utcTime = selectedDate.getTime() + (selectedDate.getTimezoneOffset() * 60000); // Convert to UTC
+      const kolkataTime = new Date(utcTime + (kolkataOffset * 60000)); // Convert to Kolkata time
+      
+      const year = kolkataTime.getFullYear();
+      const month = String(kolkataTime.getMonth() + 1).padStart(2, '0');
+      const day = String(kolkataTime.getDate()).padStart(2, '0');
       const dateString = `${year}-${month}-${day}`;
       
       const meetingData = {

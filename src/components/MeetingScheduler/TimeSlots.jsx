@@ -50,15 +50,29 @@ const TimeSlots = ({ onTimeSelect, selectedDate, selectedTimezone = 'Asia/Kolkat
     // Enhanced debugging
     console.log('=== AVAILABLE SLOTS API CALL ===');
     console.log('Selected date object:', date);
-    // Fix timezone issue: Use local date instead of UTC
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    
+    // CRITICAL FIX: Force Asia/Kolkata timezone to prevent production timezone issues
+    // Manual timezone conversion to ensure consistent behavior across all environments
+    const kolkataOffset = 5.5 * 60; // Asia/Kolkata is UTC+5:30 (5.5 hours = 330 minutes)
+    const utcTime = date.getTime() + (date.getTimezoneOffset() * 60000); // Convert to UTC
+    const kolkataTime = new Date(utcTime + (kolkataOffset * 60000)); // Convert to Kolkata time
+    
+    const year = kolkataTime.getFullYear();
+    const month = String(kolkataTime.getMonth() + 1).padStart(2, '0');
+    const day = String(kolkataTime.getDate()).padStart(2, '0');
     const dateString = `${year}-${month}-${day}`;
+    
     console.log('Date string being sent:', dateString);
+    console.log('Original date:', date);
+    console.log('Kolkata time object:', kolkataTime);
     console.log('Date day of week:', date.getDay(), '(0=Sunday, 1=Monday, etc.)');
     console.log('Current time in Asia/Kolkata:', new Date().toLocaleString('en-US', {timeZone: 'Asia/Kolkata'}));
     console.log('Selected date in Asia/Kolkata:', date.toLocaleString('en-US', {timeZone: 'Asia/Kolkata', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}));
+    console.log('Environment info:', {
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      offset: date.getTimezoneOffset(),
+      kolkataOffset: kolkataOffset
+    });
     
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
@@ -121,38 +135,42 @@ const TimeSlots = ({ onTimeSelect, selectedDate, selectedTimezone = 'Asia/Kolkat
       // Check if we have slots data
       if (availableData.slots && availableData.slots.length > 0) {
         // Convert backend slots to frontend format
+        // Backend now handles all filtering correctly, so we can use the backend data directly
         const formattedSlots = availableData.slots.map(slot => ({
-          time: slot.time,
-          display: slot.displayTime,
-          available: slot.available,
-          reason: slot.reason
+          time: slot.time, // Use the 24-hour time from backend
+          display: slot.displayTime, // Use the correct display time from backend
+          available: slot.available, // Use the availability status from backend
+          reason: slot.reason // Use the reason from backend
         }));
         setTimeSlots(formattedSlots);
         
-        // Check if it's a weekday but all slots are in the past
+        // Check if it's a weekday and count available slots from backend
         const isWeekday = availableData.dayOfWeek && !['Saturday', 'Sunday'].includes(availableData.dayOfWeek);
-        const hasAvailableSlots = availableData.availableSlots > 0;
+        const availableSlots = formattedSlots.filter(slot => slot.available).length;
+        const pastSlots = formattedSlots.filter(slot => slot.reason === 'Past time slot').length;
+        const bookedSlots = formattedSlots.filter(slot => slot.reason === 'Already booked').length;
         
         console.log('=== FRONTEND LOGIC DEBUG ===');
         console.log('isWeekday:', isWeekday);
-        console.log('hasAvailableSlots:', hasAvailableSlots);
+        console.log('availableSlots (from backend):', availableSlots);
+        console.log('pastSlots (from backend):', pastSlots);
+        console.log('bookedSlots (from backend):', bookedSlots);
         console.log('dayOfWeek:', availableData.dayOfWeek);
-        console.log('availableSlots:', availableData.availableSlots);
-        console.log('totalBookedSlots:', bookedData.totalBookedSlots || 0);
+        console.log('Backend availableSlots count:', availableData.availableSlots);
         
-        if (isWeekday && !hasAvailableSlots) {
-          // It's a valid weekday, but all slots are in the past
-          setError('All time slots for today have passed. Please select a future date or time.');
-          console.log('⚠️ Valid weekday but all slots are in the past - ERROR SET');
-        } else if (!isWeekday) {
+        if (!isWeekday) {
           // It's a weekend
           setError('Meetings can only be scheduled on weekdays (Monday-Friday)');
           console.log('❌ Weekend date selected - ERROR SET');
+        } else if (availableSlots === 0 && pastSlots > 0) {
+          // It's a valid weekday, but all slots are in the past
+          setError('All time slots for today have passed. Please select a future date or time.');
+          console.log('⚠️ Valid weekday but all slots are in the past - ERROR SET');
         } else {
           // Clear any previous error
           setError(null);
           console.log('✅ Time slots set successfully:', formattedSlots.length, 'slots');
-          console.log('📊 Summary: Available slots:', availableData.availableSlots, '| Booked slots:', bookedData.totalBookedSlots || 0);
+          console.log('📊 Summary: Available:', availableSlots, '| Past:', pastSlots, '| Booked:', bookedSlots);
         }
       } else {
         // No slots available (weekend or invalid date)
@@ -277,23 +295,23 @@ const TimeSlots = ({ onTimeSelect, selectedDate, selectedTimezone = 'Asia/Kolkat
 
       {/* Time slots grid */}
       {!loading && timeSlots.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 max-h-80 overflow-y-auto">
-          {timeSlots.map((timeSlot) => (
-            <div key={timeSlot.time} className="flex items-center justify-between">
-              <button
-                onClick={() => handleTimeSelect(timeSlot)}
+      <div className="grid grid-cols-2 gap-3 max-h-80 overflow-y-auto">
+        {timeSlots.map((timeSlot) => (
+          <div key={timeSlot.time} className="flex items-center justify-between">
+            <button
+              onClick={() => handleTimeSelect(timeSlot)}
                 disabled={!timeSlot.available}
-                className={`
+              className={`
                   flex-1 p-3 rounded-md border text-sm font-medium transition-all duration-200 relative
                   ${!timeSlot.available
                     ? timeSlot.reason === 'Already booked'
                       ? 'bg-red-500/10 text-red-400 border-red-500/30 cursor-not-allowed'
                       : 'bg-gray-600/20 text-gray-400 border-gray-600/30 cursor-not-allowed'
                     : selectedTime === timeSlot.time
-                      ? 'bg-[#1A5069] text-[#EED4AD] border-[#55ACD5]'
-                      : 'bg-transparent text-[#EED4AD] border-[#55ACD5]/30 hover:border-[#55ACD5] hover:bg-[#55ACD5]/10'
-                  }
-                `}
+                  ? 'bg-[#1A5069] text-[#EED4AD] border-[#55ACD5]'
+                  : 'bg-transparent text-[#EED4AD] border-[#55ACD5]/30 hover:border-[#55ACD5] hover:bg-[#55ACD5]/10'
+                }
+              `}
                 title={!timeSlot.available ? timeSlot.reason : ''}
               >
                 <div className="flex items-center justify-between">
@@ -312,10 +330,10 @@ const TimeSlots = ({ onTimeSelect, selectedDate, selectedTimezone = 'Asia/Kolkat
                     </div>
                   )}
                 </div>
-              </button>
-            </div>
-          ))}
-        </div>
+            </button>
+          </div>
+        ))}
+      </div>
       )}
 
       {/* No slots available */}
