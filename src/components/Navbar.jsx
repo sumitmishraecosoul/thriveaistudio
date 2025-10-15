@@ -1,5 +1,5 @@
 // import React from 'react';
-// import ThriveLogo from "../assets/icons/thrive_logo.svg";
+// import VectorLogo from "../assets/icons/vector_logo_white.svg";
 // const Navbar = () => {
 //   return (
 //     <div
@@ -52,7 +52,7 @@
 
 
 // import React, { useState } from "react";
-// import ThriveLogo from "../assets/icons/thrive_logo.svg";
+// import VectorLogo from "../assets/icons/vector_logo_white.svg";
 // import { ChevronDown } from "lucide-react"; // You must install lucide-react or use your own icon
 
 // const Navbar = () => {
@@ -152,7 +152,7 @@
 
 // import React, { useState } from 'react';
 // import { FaChevronDown } from 'react-icons/fa';
-// import ThriveLogo from "../assets/icons/thrive_logo.svg";
+// import VectorLogo from "../assets/icons/vector_logo_white.svg";
 
 // const Navbar = () => {
 //   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -238,7 +238,7 @@
 // import React, { useState } from 'react';
 // import { NavLink, useNavigate } from 'react-router-dom';
 // import { FaChevronDown } from 'react-icons/fa';
-// import ThriveLogo from "../assets/icons/thrive_logo.svg";
+// import VectorLogo from "../assets/icons/vector_logo_white.svg";
 
 // const Navbar = () => {
 //   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -365,7 +365,7 @@
 // import React, { useState } from 'react';
 // import { NavLink, useNavigate } from 'react-router-dom';
 // import { FaChevronDown } from 'react-icons/fa';
-// import ThriveLogo from "../assets/icons/thrive_logo.svg";
+// import VectorLogo from "../assets/icons/vector_logo_white.svg";
 
 // const Navbar = () => {
 //   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -532,7 +532,7 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaChevronDown, FaBars, FaTimes } from 'react-icons/fa';
-import ThriveLogo from "../assets/icons/thrive_logo.svg";
+import VectorLogo from "../assets/icons/vector_logo_white.svg";
 
 const Navbar = () => {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -565,7 +565,7 @@ const Navbar = () => {
       <nav className="flex items-center justify-between px-6 lg:px-10 py-6 relative z-50 w-full">
         {/* Logo */}
         <div className="h-10 w-auto">
-          <img src={ThriveLogo} alt="Thrive Logo" className="h-14" />
+          <img src={VectorLogo} alt="Vector Logo" className="h-14" />
         </div>
 
         {/* Desktop Nav Items */}
@@ -606,8 +606,8 @@ const Navbar = () => {
 
         {/* Right Buttons */}
         <div className="hidden lg:flex gap-4">
-          <a href="https://brands.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-5 py-2 rounded-full text-sm font-semibold">Thrive Brands</a>
-          <a href="https://vectorwebapp.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-5 py-2 rounded-full text-sm font-semibold">Vector.ai</a>
+          <a href="https://thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-5 py-2 rounded-full text-sm font-semibold">Thrive Brands</a>
+          <a href="https://vectorwebapp.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-5 py-2 rounded-full text-sm font-semibold">Vector App</a>
         </div>
 
         {/* Mobile Toggle Button */}
@@ -652,8 +652,8 @@ const Navbar = () => {
           <NavLink to="/contact" className="block text-[#d9b96a] hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>Contact Us</NavLink>
 
           <div className="flex flex-col gap-3 mt-4">
-            <a href="https://brands.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-4 py-2 rounded-full text-center font-semibold">Thrive Brands</a>
-            <a href="https://vectorwebapp.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-4 py-2 rounded-full text-center font-semibold">Vector.ai</a>
+            <a href="https://thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-4 py-2 rounded-full text-center font-semibold">Thrive Brands</a>
+            <a href="https://vectorwebapp.thrivebrands.ai/" target="_blank" rel="noopener noreferrer" className="bg-[#eed4ad] text-[#001220] px-4 py-2 rounded-full text-center font-semibold">Vector App</a>
           </div>
         </div>
       )}
@@ -667,7 +667,7 @@ export default Navbar;
 
 
 // import React, { useState } from "react";
-// import ThriveLogo from "../assets/icons/thrive_logo.svg";
+// import VectorLogo from "../assets/icons/vector_logo_white.svg";
 // import { FaChevronDown } from "react-icons/fa";
 
 // const Navbar = () => {
@@ -775,7 +775,7 @@ export default Navbar;
 
 // import React, { useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";
-// import ThriveLogo from "../assets/icons/thrive_logo.svg";
+// import VectorLogo from "../assets/icons/vector_logo_white.svg";
 // import { FaChevronDown } from "react-icons/fa";
 
 // const Navbar = () => {

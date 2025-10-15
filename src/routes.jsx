@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Home from "./pages/Home";
 import About from "../src/pages/About";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
 // import Services from "./pages/Services";
 // import Portfolio from "./pages/Portfolio";
 // import Blog from "./pages/Blog";
@@ -21,6 +23,14 @@ export const router = createBrowserRouter([
       {
         path: "about",
         element: <About />,
+      },
+      {
+        path: "privacy-policy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "terms-conditions",
+        element: <TermsConditions />,
       },
     //   {
     //     path: "services",

@@ -124,6 +124,7 @@
 
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ThriveLogo from "../../assets/icons/thrive_logo.svg";
 
 const Footer = () => {
@@ -154,14 +155,32 @@ const Footer = () => {
         {/* Divider */}
         <hr className="border border-gray-600 my-2 sm:my-4" />
 
-        {/* Back to top */}
-        <button
-          onClick={scrollToTop}
-          className="text-sm sm:text-base hover:text-white transition flex items-center space-x-1"
-        >
-          <span>Back on top</span>
-          <span>↑</span>
-        </button>
+        {/* Footer Links */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <Link 
+              to="/privacy-policy" 
+              className="text-sm sm:text-base text-gray-300 hover:text-white transition"
+            >
+              Privacy Policy
+            </Link>
+            <Link 
+              to="/terms-conditions" 
+              className="text-sm sm:text-base text-gray-300 hover:text-white transition"
+            >
+              Terms & Conditions
+            </Link>
+          </div>
+          
+          {/* Back to top */}
+          <button
+            onClick={scrollToTop}
+            className="text-sm sm:text-base hover:text-white transition flex items-center space-x-1"
+          >
+            <span>Back on top</span>
+            <span>↑</span>
+          </button>
+        </div>
       </div>
     </footer>
   );
